@@ -59,17 +59,19 @@ struct ContentView: View {
             
             List{
                 
-                ForEach (tasks.indices, id: \.self){index in
+                ForEach (tasks.sorted (by: {$0.date < $1.date})){task in
                     HStack{
                         
-                        Text(tasks[index].name)
+                        Text(task.name)
                         Spacer()
-                        Text(tasks[index].date, style: .date)
+                        Text(task.date, style: .date)
                         
                         Spacer()
                         
                         Button (action: {
-                            deleteTask(at: index)
+                            if let index = tasks.firstIndex(where: {$0.id == task.id}){
+                                deleteTask(at: index)
+                            }
                         }) {
                             Image(systemName: "trash")
                                 .foregroundColor(.red)
